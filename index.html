@@ -1,0 +1,107 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Bloc de Notas</title>
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <script>
+    function guardar(nombre, ruta, texto){
+          if (!nombre || !ruta || !texto) {
+            $('.onfailure').fadeIn("fast").delay(2000).fadeOut("fast");
+          } else {
+            var parametros = {
+                  "nombre" : nombre,
+                  "ruta" : ruta,
+                  "texto" : texto
+            };
+            $.ajax({
+                  data:  parametros,
+                  url:   'guardararchivo.php',
+                  type:  'post',
+                  success:  function (response) {
+                          $('.onsuccess').html(response);
+                          $('.onsuccess').fadeIn("fast").delay(2000).fadeOut("fast");
+                  }
+            });
+          }
+    }
+
+    function guardardirectorio(nombre, ruta){
+          if (!nombre || !ruta) {
+            $('.onfailuredir').fadeIn("fast").delay(2000).fadeOut("fast");
+          } else {
+            var parametros = {
+                  "nombre" : nombre,
+                  "ruta" : ruta
+            };
+            $.ajax({
+                  data:  parametros,
+                  url:   'guardardirectorio.php',
+                  type:  'post',
+                  success:  function (response) {
+                          $('.onsuccessdir').html(response);
+                          $('.onsuccessdir').fadeIn("fast").delay(2000).fadeOut("fast");
+                  }
+            });
+          }
+    }
+
+    function eraseText() {
+      document.getElementById("textareanota").value = "";
+      $('.onclear').fadeIn("fast").delay(2000).fadeOut("fast");
+    }
+  </script>
+</head>
+<body>
+    <div id="notas" class="container">
+      <h2>Crear archivo txt</h2>
+      <div id="divformnotas">
+        <form id="formnotas">
+          <input type="text" class="form-control" name="nombrearhivo" placeholder="Ingrese nombre del archivo" value="" id="nombrearhivonota">
+          <br>
+          <input type="text" class="form-control" name="rutaarhivo" placeholder="Ingrese ruta completa del archivo ej: /home/www/blocdenotas.atwebpages.com" value="" id="rutaarhivonota">
+          <br>
+          <textarea rows="10" cols="100" class="form-control" name="textarea" placeholder="Ingrese el texto aquí" value="" id="textareanota"></textarea>
+          <br>
+          <input type="button" class="btn btn-success btn-block" name="guardar-button" value="Guardar" onclick="guardar($('#nombrearhivonota').val(), $('#rutaarhivonota').val(), $('#textareanota').val() );return false;"/>
+          <br>
+          <input type="button" class="btn btn-info btn-block" name="despejar" value="Despejar" onclick="javascript:eraseText();" />
+        </form>
+      </div>
+      <div id="divrespuestas">
+        <h3 class="onsuccess" style="display:none"> El archivo se guardó exitosamente. </h3>
+        <h3 class="onfailure" style="display:none"> Hay campos vacios.  </h3>
+        <h3 class="onclear" style="display:none"> Se despejó la caja de texto.  </h3>
+      </div>  
+    </div>
+
+    <div id="directorio" class="container">
+      <h2>Crear directorios</h2>
+      <div id="divrespuestasdirectorio">
+        <h4 class="onsuccessdir" style="display:none"> El archivo se guardó exitosamente. </h4>
+        <h4 class="onfailuredir" style="display:none"> Hay campos vacios.  </h4>
+      </div> 
+      <div id="divformdirectorio">
+        <form id="formdirectorio">
+          <input type="text" class="form-control" name="nombredirectorio" placeholder="Ingrese nombre del directorio" value="" id="nombredirectorionota">
+          <br>
+          <input type="text" class="form-control" name="rutadirectorio" placeholder="Ingrese ruta del directorio ej: /home/www/blocdenotas.atwebpages.com" value="" id="rutadirectorionota">
+          <br>
+          <input type="button" class="btn btn-success btn-block" name="guardar-button" value="Guardar" onclick="guardardirectorio($('#nombredirectorionota').val(), $('#rutadirectorionota').val() );return false;"/>
+          <br>
+        </form>
+      </div>
+    </div>
+
+</body>
+
+</html>
